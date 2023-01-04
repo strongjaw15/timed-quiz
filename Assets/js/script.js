@@ -1,28 +1,28 @@
-let secondsLeft = 90;
+let secondsLeft = 91;
 let countdown;
-let secondsDisplay = document.getElementsByTagName("h2");
-let startButton = document.getElementById("startButton")
+let secondsDisplay = document.getElementById("timer");
+let startButton = document.getElementById("startButton");
 
 // This is the start function, called by clicking the start button.
 function start(){
   // askQuestion();
-  startTimer;
-  console.log("hi");
+  startTimer();
 }
 
 // This starts the timer.
 function startTimer(){
-  countdown = setInterval(timer, 1000);
+  countdown = setInterval(timer(), 1000);
 }
 
 // This is the timer.
 function timer(){
   secondsLeft--;
-  secondsDisplay.textContent="seconds left";
+  secondsDisplay.textContent=`${secondsLeft} Seconds Left`;
 
   if(secondsLeft === 0){
     clearInterval(countdown);
     // sendMessage();
+    console.log("timer started");
   }
 }
 
@@ -37,4 +37,4 @@ function sendMessage(){
 }
 
 // This is the event listener for the start button. It initiates the quiz.
-startButton.addEventListener("click", start);
+startButton.addEventListener("click", start());
