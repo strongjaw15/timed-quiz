@@ -5,7 +5,11 @@ body{
 }
 
 h1{
-  font-size: 320%;
+  font-size: 300%;
+}
+
+h2{
+  font-size: 200%;
 }
 
 header{
@@ -22,5 +26,14 @@ main{
 }
 
 button{
-  width: 20%
+  width: 25%;
+  height: 3em;
+  background-color: #cee8ed;
+  border-radius: 6px;
+  box-shadow: 3px 3px 2px #5f666d;
+  cursor: pointer;
+}
+
+button:hover{
+  background-color: #dcedce;
 }
