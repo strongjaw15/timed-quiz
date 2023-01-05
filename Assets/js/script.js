@@ -9,6 +9,10 @@ const questionBox = document.getElementById("questionBox");
 const secondsDisplay = document.getElementById("timer");
 const startButton = document.getElementById("startButton");
 
+// questions[0].answers[i] <-- this is an example of how to navigate through an array of objects
+
+// Make a function to show one question at a time, make a loop to display the answers, put the answers in an array in the array of objects.
+
 let questions = [
   {q1: "How many toes does a fish have?",
     a: 2,
@@ -51,16 +55,18 @@ function timer(){
 function askQuestion(){
   question = document.createElement("h3");
   // let questionContent = document.createTextNode(`question`);
-  // question.appendChild(questionContent);
+  // question.appendChild(questionContent); <-- ^ these are old code, left for reference
   question.textContent = `question`;
   questionBox.appendChild(question);
+    questionAnswersList = document.createElement("ol");
+    // questionAnswersList.setAttribute("style", "list-style-type: numeric;"); <-- this is for the ol type
+    questionBox.appendChild(questionAnswersList);
 
-  questionAnswersList = document.createElement("ol");
-  questionBox.appendChild(questionAnswersList);
-
-  questionAnswers = document.createElement("li");
-  questionAnswers.textContent = `asd`;
-  questionAnswersList.appendChild(questionAnswers);
+    // for( var i = 0; i<questionAnswers.length; i++){ <-- this is for looping the line items
+      questionAnswers = document.createElement("li");
+      questionAnswers.textContent = `asd`;
+      questionAnswersList.appendChild(questionAnswers);
+    // }
 }
 
 // This sends the message at the end of the quiz.
