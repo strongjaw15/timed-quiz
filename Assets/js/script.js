@@ -15,7 +15,8 @@ let answersList;
 let answer;
 let chosenAnswer;
 let properAnswer;
-let scoreValue;
+let correctAnswer;
+let scoreValue = 0;
 
 const questionBox = document.getElementById("questionBox");
 const secondsDisplay = document.getElementById("timer");
@@ -27,11 +28,11 @@ const startButton = document.getElementById("startButton");
 
 let questions = [
   {question: "How many toes does a fish have?",
-    answers: ["2", "3", "10", "27"],
-    correctAnswer: "3"},
+    answers: ["0 toes", "3", "10", "27"],
+    correctAnswer: "0 toes"},
   {question: "How many wings on a cow?",
-    answers: ["1", "4", "5", "12"],
-    correctAnswer: "1"}
+    answers: ["0 wings", "4", "5", "12"],
+    correctAnswer: "0 wings"}
 ]
 
 // This starts the quiz.
@@ -74,24 +75,24 @@ function askQuestion(){
   
   // This creates the question text.
   questionText = document.createElement("h3");
-  questionText.textContent = `${questions[questionNumber].question}`; // <-- populated from questions array
+  questionText.textContent = `${questions[questionNumber].question}`;
   questionBox.appendChild(questionText);
 
-    // This creates the list for the answers to sit in.
+    // This creates the list paragraph for the answers to sit in.
     answersList = document.createElement("p");
     answersList.setAttribute("style", "display: flex; flex-direction: column; align-items: center; gap: 0.5em");
     questionBox.appendChild(answersList);
 
-      // This creates and populates the line item elements with the multiple choice answers, using a for loop.
+      // This creates and populates the buttons with the multiple choice answers, using a for loop.
       for(var i = 0; i < 4; i++){
         answerButton = document.createElement("button");
         answerButton.setAttribute("style", "width: 12em");
         answerButton.textContent = `${questions[questionNumber].answers[i]}`;
         answersList.appendChild(answerButton);
 
-        // This sets the correct answer up for comparison with the chosen answer in the tallyScore function.
-        properAnswer = questions[questionNumber].correctAnswer
       }
+  // This sets the correct answer up for comparison with the chosen answer in the tallyScore function.
+  properAnswer = questions[questionNumber].correctAnswer
 }
 
 // This advances to the next question, activated by event listener on the answer buttons.
@@ -107,9 +108,13 @@ function advanceQuestion(){
 }
 
 function tallyScore(){
+
+  console.log("chosen answer: " + chosenAnswer)
+  console.log("proper answer: " + properAnswer)
+
   if(chosenAnswer === properAnswer){ // <-- This isn't working yet.
     scoreValue++
-  }
+  }  
 }
 
 // This sends the message at the end of the quiz.
@@ -127,6 +132,6 @@ questionBox.addEventListener("click", function(event){
     chosenAnswer = event.target.firstChild.data;
     advanceQuestion();
     tallyScore();
-    console.log(event)
+    // console.log(event)
   }
 })
