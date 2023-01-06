@@ -115,6 +115,8 @@ function tallyScore(){
   if(chosenAnswer === properAnswer){ // <-- This isn't working yet.
     scoreValue++
   }  
+
+  console.log("score value " + scoreValue)
 }
 
 // This sends the message at the end of the quiz.
@@ -130,8 +132,8 @@ startButton.addEventListener("click", start);
 questionBox.addEventListener("click", function(event){
   if(event.target.matches("button")){
     chosenAnswer = event.target.firstChild.data;
-    advanceQuestion();
     tallyScore();
-    // console.log(event)
+    advanceQuestion();
+    console.log("button clicked " + event.target.firstChild.data)
   }
 })
