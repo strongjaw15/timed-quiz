@@ -1,9 +1,21 @@
+// To Do:
+  // determine if a right answer has been selected
+  // tally the score
+  // stop the timer if all questions are asnwered
+  // create a form to input user initials
+  // save the score and itials
+  // create second page that displays highscores
+
 let secondsLeft = 90;
 let countdown;
-let question;
+let questionText;
 let questionContent;
-let questionAnswersList;
-let questionAnswers;
+let questionNumber = 0;
+let answersList;
+let answer;
+let chosenAnswer;
+let properAnswer;
+let scoreValue;
 
 const questionBox = document.getElementById("questionBox");
 const secondsDisplay = document.getElementById("timer");
@@ -14,32 +26,29 @@ const startButton = document.getElementById("startButton");
 // Make a function to show one question at a time, make a loop to display the answers, put the answers in an array in the array of objects.
 
 let questions = [
-  {q1: "How many toes does a fish have?",
-    a: 2,
-    b: 3,
-    c: 10,
-    d: 27},
-  {q2: "How many wings on a cow?",
-    a: 1,
-    b: 4,
-    c: 5,
-    d: 12}
+  {question: "How many toes does a fish have?",
+    answers: ["2", "3", "10", "27"],
+    correctAnswer: "3"},
+  {question: "How many wings on a cow?",
+    answers: ["1", "4", "5", "12"],
+    correctAnswer: "1"}
 ]
 
-// This is the start function, called by clicking the start button.
+// This starts the quiz.
 function start(){
-  questionBox.innerHTML="";
-  askQuestion();
-  startTimer();
+  countdown = setInterval(timer, 1000);
+
+  // This sets the scoreValue at the beginning of the quiz.
+  scoreValue = 0
 }
 
-// This starts the timer.
-function startTimer(){
-  countdown = setInterval(timer, 200);
-}
-
-// This is the timer.
+// This is the timer. It also has the ask question function nesting in it so that the first question shows up at the same time as the timer.
 function timer(){
+  if(secondsLeft === 90){
+    askQuestion();
+    hideStartButton();
+  }
+
   secondsDisplay.textContent=`${secondsLeft} Seconds Left`;
   secondsLeft--;
 
@@ -51,29 +60,73 @@ function timer(){
   }
 }
 
-// This poses the questions. Needs lots of work.
-function askQuestion(){
-  question = document.createElement("h3");
-  // let questionContent = document.createTextNode(`question`);
-  // question.appendChild(questionContent); <-- ^ these are old code, left for reference
-  question.textContent = `question`;
-  questionBox.appendChild(question);
-    questionAnswersList = document.createElement("ol");
-    // questionAnswersList.setAttribute("style", "list-style-type: numeric;"); <-- this is for the ol type
-    questionBox.appendChild(questionAnswersList);
+// These functions hide and show the start button.
+function hideStartButton(){
+  startButton.setAttribute("style", "display: none");
+}
 
-    // for( var i = 0; i<questionAnswers.length; i++){ <-- this is for looping the line items
-      questionAnswers = document.createElement("li");
-      questionAnswers.textContent = `asd`;
-      questionAnswersList.appendChild(questionAnswers);
-    // }
+function showStartButton(){
+  startButton.setAttribute("style", "display: block")
+}
+
+// This poses the questions.
+function askQuestion(){
+  
+  // This creates the question text.
+  questionText = document.createElement("h3");
+  questionText.textContent = `${questions[questionNumber].question}`; // <-- populated from questions array
+  questionBox.appendChild(questionText);
+
+    // This creates the list for the answers to sit in.
+    answersList = document.createElement("p");
+    answersList.setAttribute("style", "display: flex; flex-direction: column; align-items: center; gap: 0.5em");
+    questionBox.appendChild(answersList);
+
+      // This creates and populates the line item elements with the multiple choice answers, using a for loop.
+      for(var i = 0; i < 4; i++){
+        answerButton = document.createElement("button");
+        answerButton.setAttribute("style", "width: 12em");
+        answerButton.textContent = `${questions[questionNumber].answers[i]}`;
+        answersList.appendChild(answerButton);
+
+        // This sets the correct answer up for comparison with the chosen answer in the tallyScore function.
+        properAnswer = questions[questionNumber].correctAnswer
+      }
+}
+
+// This advances to the next question, activated by event listener on the answer buttons.
+function advanceQuestion(){
+  questionBox.innerHTML = "";
+
+  if(questionNumber < questions.length - 1){
+    questionNumber++;
+    askQuestion()}
+  else{
+    sendMessage()
+  }
+}
+
+function tallyScore(){
+  if(chosenAnswer === properAnswer){ // <-- This isn't working yet.
+    scoreValue++
+  }
 }
 
 // This sends the message at the end of the quiz.
 function sendMessage(){
-  questionBox.textContent="Congrats, your score is 0!";
+  questionBox.textContent=`Congrats, your score is ${scoreValue}/${questions.length}!`;
 
 }
 
 // This is the event listener for the start button. It initiates the quiz.
 startButton.addEventListener("click", start);
+
+// This is the event listener for the answer buttons.
+questionBox.addEventListener("click", function(event){
+  if(event.target.matches("button")){
+    chosenAnswer = event.target.firstChild.data;
+    advanceQuestion();
+    tallyScore();
+    console.log(event)
+  }
+})

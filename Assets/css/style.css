@@ -41,3 +41,9 @@ button{
 button:hover{
   background-color: #dcedce;
 }
+
+ol{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
