@@ -7,7 +7,6 @@ I wanted to create a timed quiz that I could populate with my own questions to p
 ## Visuals
 
 ![](./assets/images/timedQuiz.gif)
-![](./assets/images/Screenshot_20230107_043227.png)
 
 ## Link
 
