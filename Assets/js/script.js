@@ -1,13 +1,3 @@
-// To Do:
-  // fix my buttons!!!!
-  // save the score and itials
-    // in my save function I need to:
-      // get the score
-      // get the questions number
-      // get the initials from the input.
-      // save them to local storage
-  // create second page that displays highscores
-
 let secondsLeft = 60;
 let countdown;
 let questionText;
@@ -53,7 +43,7 @@ let questions = [
   {question: "How many times does the sun set on the traveler's journey in Around the World in Eighty Days?",
     answers: ["79", "80", "81", "82"],
     correctAnswer: "81"},
-  {question: "WHo worte the first logarithm?",
+  {question: "Who worte the first logarithm?",
     answers: ["Charles Darwin", "John Napier", "Robert Boyle", "Isaac Newton"],
     correctAnswer: "John Napier"},
   {question: "When did plate tectonics theory become commonly accepted?",
@@ -111,7 +101,7 @@ function showStartButton(){
   scoresButton.setAttribute("style", "display: none")
 }
 
- // This function shows the scores button.
+ // This function shows the show scores button.
  function showScoresButton(){
   scoresButton.setAttribute("style", "display: block")
 }
@@ -129,7 +119,7 @@ function askQuestion(){
     answersList.setAttribute("style", "display: flex; flex-direction: column; align-items: center; gap: 0.5em");
     questionBox.appendChild(answersList);
 
-      // This creates and populates the buttons with the multiple choice answers, using a for loop.
+      // This creates and populates the buttons with the multiple choice answers.
       for(var i = 0; i < questions[questionNumber].answers.length; i++){
         answerButton = document.createElement("button");
         answerButton.setAttribute("style", "width: 18em; height: 5em");
@@ -150,6 +140,7 @@ function advanceQuestion(){
     askQuestion()}
 }
 
+// This tallys the score.
 function tallyScore(){
   if(chosenAnswer === properAnswer){
     scoreValue++
@@ -208,16 +199,11 @@ function saveScore(){
   // This saves the updated score history.
   localStorage.setItem("scores", JSON.stringify(savedScores));
 
-  // refresh();
+  // This arranges the page appearance after hitting save.
   formBox.innerHTML="";
   hideScoresButton();
   showScores();
   showStartButton();
-}
-
-// This refreshes the page for a new quiz once the scores are saved.
-function refresh(){
-  location.reload();
 }
 
 // This shows the saved high scores.
@@ -233,6 +219,7 @@ function showScores(){
     savedScores = fromStorage;
   }
 
+  // This displays the scores history.
   for(i=0;i<savedScores.length;i++){
     let newLine = document.createElement("p");
     newLine.textContent = `${savedScores[i].initials}: ${savedScores[i].score}`;
@@ -251,10 +238,10 @@ function clearHighScoresButton(){
   questionBox.appendChild(clearButton);
 }
 
-// This clears the high scores
+// This clears the high scores and refreshes the page
 function clearHighScores(){
   localStorage.clear();
-  refresh();
+  location.reload()
 }
 
 // This is the event listener for the buttons.
