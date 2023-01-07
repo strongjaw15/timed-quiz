@@ -37,36 +37,51 @@ const formBox = document.getElementById("initialsBox");
 startButton.setAttribute("class", "start");
 scoresButton.setAttribute("class", "scores");
 
-
-// questions[0].answers[i] <-- this is an example of how to navigate through an array of objects
-
-// Make a function to show one question at a time, make a loop to display the answers, put the answers in an array in the array of objects.
-
 let questions = [
   {question: "How many toes does a fish have?",
-    answers: ["0 toes", "3", "10", "27"],
-    correctAnswer: "0 toes"},
+    answers: ["0", "3", "10", "27"],
+    correctAnswer: "0"},
   {question: "How many wings on a cow?",
-    answers: ["0 wings", "4", "5", "12"],
-    correctAnswer: "0 wings"}
+    answers: ["0", "4", "5", "12"],
+    correctAnswer: "0"},
+  {question: "How old was George Washington when the first Bald Eagle was born from a golden egg forged by Ben Franklin and the egyptian gods?",
+    answers: ["5", "7", "11", "37", "George Washington wasn't alive yet when the first Bald Eagle was discovered."],
+    correctAnswer: "George Washington wasn't alive yet when the first Bald Eagle was discovered."},
+  {question: "How do you spell cheh-kuh-sluh-vaa-kee-uh?",
+    answers: ["Checkoslovakia", "Czechoslovakia", "Zcekosluvackia", "Chechkuhslaavokia"],
+    correctAnswer: "Czechoslovakia"},
+  {question: "How many times does the sun set on the traveler's journey in Around the World in Eighty Days?",
+    answers: ["79", "80", "81", "82"],
+    correctAnswer: "81"},
+  {question: "WHo worte the first logarithm?",
+    answers: ["Charles Darwin", "John Napier", "Robert Boyle", "Isaac Newton"],
+    correctAnswer: "John Napier"},
+  {question: "When did plate tectonics theory become commonly accepted?",
+    answers: ["1910s", "1940s", "1960s", "1980s"],
+    correctAnswer: "1960s"},
 ]
 
 // This starts the quiz.
 function start(){
   countdown = setInterval(timer, 1000);
 
-  // This sets the scoreValue at the beginning of the quiz.
+  // This sets the scoreValue and questionNumber at the beginning of the quiz.
   scoreValue = 0;
+  questionNumber = 0;
 
-  // This clears out the end of quiz stuff.
+  // This clears out the show scores stuff if it's there.
   questionBox.innerHTML=""
+  formBox.innerHTML=""
+
+  // This hides the other buttons.
+  hideScoresButton();
+  hideStartButton();
 }
 
 // This is the timer. It also has the ask question function nesting in it so that the first question shows up at the same time as the timer.
 function timer(){
   if(secondsLeft === 60){
     askQuestion();
-    hideStartButton();
   }
 
   secondsDisplay.textContent=`${secondsLeft} Seconds Left`;
@@ -78,16 +93,27 @@ function timer(){
     secondsDisplay.textContent="";
     secondsLeft = 60;
     sendMessage();
+    showScoresButton();
   }
 }
 
-// These functions hide and show the start button.
+// This function hides the start button.
 function hideStartButton(){
   startButton.setAttribute("style", "display: none");
 }
-
+ // This function shows the start button.
 function showStartButton(){
   startButton.setAttribute("style", "display: block")
+}
+
+ // This function hides the show scores button.
+ function hideScoresButton(){
+  scoresButton.setAttribute("style", "display: none")
+}
+
+ // This function shows the scores button.
+ function showScoresButton(){
+  scoresButton.setAttribute("style", "display: block")
 }
 
 // This poses the questions.
@@ -104,14 +130,14 @@ function askQuestion(){
     questionBox.appendChild(answersList);
 
       // This creates and populates the buttons with the multiple choice answers, using a for loop.
-      for(var i = 0; i < 4; i++){
+      for(var i = 0; i < questions[questionNumber].answers.length; i++){
         answerButton = document.createElement("button");
-        answerButton.setAttribute("style", "width: 12em");
+        answerButton.setAttribute("style", "width: 18em; height: 5em");
         answerButton.setAttribute("class", "answer");
         answerButton.textContent = `${questions[questionNumber].answers[i]}`;
         answersList.appendChild(answerButton);
-
       }
+
   // This sets the correct answer up for comparison with the chosen answer in the tallyScore function.
   properAnswer = questions[questionNumber].correctAnswer
 }
@@ -131,7 +157,7 @@ function tallyScore(){
 
   // This penalizes a wrong answer by taking time off the clock.
   else {
-    secondsLeft = secondsLeft-5
+    secondsLeft = secondsLeft/2
   }
 }
 
@@ -139,11 +165,8 @@ function tallyScore(){
 function sendMessage(){
 
   // This sets the score value to a percentage and displays it.
-  x = scoreValue;
-  y = questions.length;
-  z = x/y;
-  scorePercentage = z*100;
-  questionBox.textContent=`Congrats, your score is ${scorePercentage}%!`;
+  scorePercentage = [[scoreValue/questions.length]*100] + "%";
+  questionBox.textContent=`Congratulations, your score is ${scorePercentage}!`;
 
   // This creates the submission text.
   initialsP = document.createElement("p");
@@ -168,20 +191,70 @@ function sendMessage(){
 // This saves the score and initials to local storage.
 function saveScore(){
 
-  // This fetches the saved scores and objectifies them.
-  // savedScores = localStorage.getItem("scores");
-  // JSON.parse(savedScores);
+  // This fetches the saved scores and stores them in their variable.
+  let fromStorage = JSON.parse(localStorage.getItem("scores"));
+  if(fromStorage !== null){
+    savedScores = fromStorage
+  };
 
   // This puts the latest initials and score into an object.
   let newObject = {
-    initials: `${initialsText}:`,
-    score: `${scorePercentage}%`
-  }
+    initials: initialsText,
+    score: scorePercentage
+  };
+  // This puts the latest scores into the same variable as the saved scores.
   savedScores.push(newObject);
 
-  // This stringifies the saves scores and sends them to local storage.
-  let stringed = JSON.stringify(savedScores);
-  localStorage.setItem("scores", stringed)
+  // This saves the updated score history.
+  localStorage.setItem("scores", JSON.stringify(savedScores));
+
+  // refresh();
+  formBox.innerHTML="";
+  hideScoresButton();
+  showScores();
+  showStartButton();
+}
+
+// This refreshes the page for a new quiz once the scores are saved.
+function refresh(){
+  location.reload();
+}
+
+// This shows the saved high scores.
+function showScores(){
+
+  // This clears the questions box and saved scores before displaying scores.
+  questionBox.innerHTML="";
+  savedScores.splice(0, [savedScores.length]);
+
+  // This gets the saved scores from local storage.
+  let fromStorage = JSON.parse(localStorage.getItem("scores"));
+  if(fromStorage !== null){
+    savedScores = fromStorage;
+  }
+
+  for(i=0;i<savedScores.length;i++){
+    let newLine = document.createElement("p");
+    newLine.textContent = `${savedScores[i].initials}: ${savedScores[i].score}`;
+    questionBox.appendChild(newLine);
+  }
+
+  clearHighScoresButton();
+}
+
+// This creates the button to clear the highscores.
+function clearHighScoresButton(){
+  clearButton = document.createElement("button");
+  clearButton.setAttribute("style", "width: 12em");
+  clearButton.setAttribute("class", "clear");
+  clearButton.textContent = `Clear High Scores`;
+  questionBox.appendChild(clearButton);
+}
+
+// This clears the high scores
+function clearHighScores(){
+  localStorage.clear();
+  refresh();
 }
 
 // This is the event listener for the buttons.
@@ -206,10 +279,15 @@ main.addEventListener("click", function(event){
     initialsText = document.getElementById("getMeForSave").value;
     saveScore();
   }
+
+  // This is for the show scores button.
+  else if(event.target.matches("button.scores")){
+    showScores()
+    scoresButton.setAttribute("style", "display: none")
+  }
+
+  // This is for the clear high scores button
+  else if(event.target.matches("button.clear")){
+    clearHighScores()
+  }
 });
-
-// This is the event listener for the start button. It initiates the quiz.
-// startButton.addEventListener("click", start);
-
-// This is the event listener for the save button.
-// formBox.addEventListener("click", save);
