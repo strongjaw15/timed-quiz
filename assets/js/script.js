@@ -146,7 +146,7 @@ function tallyScore(){
     scoreValue++
   }  
 
-  // This penalizes a wrong answer by taking time off the clock.
+  // This penalizes a wrong answer by taking 1/3 of the remaining time off the clock.
   else {
     secondsLeft = Math.round(secondsLeft*2/3)
   }
@@ -157,7 +157,7 @@ function sendMessage(){
 
   // This sets the score value to a percentage and displays it.
   scorePercentage = Math.round([scoreValue/questions.length]*100) + "%";
-  questionBox.textContent=`Congratulations, your score is ${scorePercentage}!`;
+  questionBox.textContent=`Congratulations, your score is ${scorePercentage}!`
 
   // This creates the submission text.
   initialsP = document.createElement("p");
@@ -175,6 +175,7 @@ function sendMessage(){
   // This creates the submission button.
   submissionButton = document.createElement("button");
   submissionButton.setAttribute("class", "save");
+  submissionButton.setAttribute("style", "width: 5em; align-items: center");
   submissionButton.textContent = `SAVE`;
   formBox.appendChild(submissionButton);
 }
