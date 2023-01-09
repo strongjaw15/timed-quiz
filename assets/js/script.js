@@ -28,15 +28,15 @@ startButton.setAttribute("class", "start");
 scoresButton.setAttribute("class", "scores");
 
 let questions = [
-  {question: "How many toes does a fish have?",
-    answers: ["0", "3", "10", "27"],
-    correctAnswer: "0"},
-  {question: "How many wings on a cow?",
-    answers: ["0", "4", "5", "12"],
-    correctAnswer: "0"},
-  {question: "How old was George Washington when the first Bald Eagle was born from a golden egg forged by Ben Franklin and the egyptian gods?",
-    answers: ["5", "7", "11", "37", "George Washington wasn't alive yet when the first Bald Eagle was discovered."],
-    correctAnswer: "George Washington wasn't alive yet when the first Bald Eagle was discovered."},
+  {question: "How many meters long is the world record women's shot put throw?",
+    answers: ["15.61", "21.75", "22.63", "23.37"],
+    correctAnswer: "22.63"},
+  {question: "Which war was the Sopwith Camel predominantly flown in?",
+    answers: ["WWI", "Spanish Civil War", "WWII", "Vietnam"],
+    correctAnswer: "WWI"},
+  {question: "How old was Mozart when he first began composing?",
+    answers: ["5", "7", "11", "23"],
+    correctAnswer: "5"},
   {question: "How do you spell cheh-kuh-sluh-vaa-kee-uh?",
     answers: ["Checkoslovakia", "Czechoslovakia", "Zcekosluvackia", "Chechkuhslaavokia"],
     correctAnswer: "Czechoslovakia"},
@@ -46,7 +46,7 @@ let questions = [
   {question: "Who worte the first logarithm?",
     answers: ["Charles Darwin", "John Napier", "Robert Boyle", "Isaac Newton"],
     correctAnswer: "John Napier"},
-  {question: "When did plate tectonics theory become commonly accepted?",
+  {question: "During which decade did plate tectonics theory become commonly accepted?",
     answers: ["1910s", "1940s", "1960s", "1980s"],
     correctAnswer: "1960s"},
 ]
@@ -148,7 +148,7 @@ function tallyScore(){
 
   // This penalizes a wrong answer by taking time off the clock.
   else {
-    secondsLeft = secondsLeft/2
+    secondsLeft = Math.round(secondsLeft*2/3)
   }
 }
 
@@ -156,7 +156,7 @@ function tallyScore(){
 function sendMessage(){
 
   // This sets the score value to a percentage and displays it.
-  scorePercentage = [[scoreValue/questions.length]*100] + "%";
+  scorePercentage = Math.round([scoreValue/questions.length]*100) + "%";
   questionBox.textContent=`Congratulations, your score is ${scorePercentage}!`;
 
   // This creates the submission text.
